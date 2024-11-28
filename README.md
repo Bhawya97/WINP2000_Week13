@@ -5,8 +5,6 @@
 -	MYSQL Database
 - Go Modules
 
-
 #### Instructions for setting up MYSQL:
-
-##### 
-1.	Go to https://dev.mysql.com/downloads/installer/ and click on download 
+- - Click on the given  [Link](https://dev.mysql.com/downloads/installer/)
+-- ![Screenshot 2024-11-28 103128](https://github.com/user-attachments/assets/a8dc9ff2-5eef-44cc-9e8f-c8501e903942)
