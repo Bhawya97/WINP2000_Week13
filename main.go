@@ -20,6 +20,11 @@ type TimeResponse struct {
 	Error       string `json:"error,omitempty"`
 }
 
+type AllTimesResponse struct {
+	Times []string `json:"times"`
+	Error string   `json:"error,omitempty"`
+}
+
 func main() {
 	// Set up logging to a file
 	logFile, err := os.OpenFile("app.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
@@ -54,6 +59,7 @@ func main() {
 
 	// Start the HTTP server
 	http.HandleFunc("/current-time", currentTimeHandler)
+	http.HandleFunc("/all-times", allTimesHandler) // New endpoint to get all logged times
 	log.Println("Server running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
@@ -94,13 +100,48 @@ func logTimeToDatabase(timestamp time.Time) error {
 	return err
 }
 
+// New function to handle the /all-times endpoint
+func allTimesHandler(w http.ResponseWriter, r *http.Request) {
+	rows, err := db.Query("SELECT timestamp FROM time_log")
+	if err != nil {
+		writeErrorResponse(w, "Failed to retrieve time logs from database", err)
+		log.Printf("Failed to retrieve time logs from database: %v", err)
+		return
+	}
+	defer rows.Close()
+
+	var times []string
+	for rows.Next() {
+		var timestamp string
+		if err := rows.Scan(&timestamp); err != nil {
+			writeErrorResponse(w, "Failed to scan time log", err)
+			log.Printf("Failed to scan time log: %v", err)
+			return
+		}
+		times = append(times, timestamp)
+	}
+
+	// Handle case if no times are found
+	if len(times) == 0 {
+		writeErrorResponse(w, "No time logs found", nil)
+		return
+	}
+
+	// Return all logged times as JSON
+	response := AllTimesResponse{
+		Times: times,
+	}
+	writeJSONResponse(w, response)
+	log.Printf("All times retrieved: %v", times)
+}
+
 func writeErrorResponse(w http.ResponseWriter, message string, err error) {
 	log.Printf("%s: %v", message, err)
 	w.WriteHeader(http.StatusInternalServerError)
 	writeJSONResponse(w, TimeResponse{Error: message})
 }
 
-func writeJSONResponse(w http.ResponseWriter, response TimeResponse) {
+func writeJSONResponse(w http.ResponseWriter, response interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
