@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # External API and save result to MongoDB
 
 ```bash
@@ -20,3 +21,7 @@ go test -v
 go test -v -run TestFileServer
 go test ./...
 ```
+=======
+# WINP2000_Week13
+Week13_InClass
+>>>>>>> 499b897801c6925d54aaed64701103251d7fdabd
