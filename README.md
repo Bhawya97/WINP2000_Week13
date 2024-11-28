@@ -84,11 +84,7 @@ Using curl
 
 ![image](https://github.com/user-attachments/assets/bba250d7-7fff-46af-b70b-9dcdbb61b985)
 
-![image](https://github.com/user-attachments/assets/7afe97c8-8ae3-4415-ae46-f8f44b8eead9)
-
-![image](https://github.com/user-attachments/assets/ddabd68a-fcb4-4348-8e42-5424560cae44)
-
-#### Checking if the application is dockerized or not .
+#### Dockerising the application.
 
 ![image](https://github.com/user-attachments/assets/11dd7e27-f41d-4f97-bce2-1a072bdc50c5)
 
